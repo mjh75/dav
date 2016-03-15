@@ -59,6 +59,8 @@ $dbh = null;
 			function comparePass() {
 				if(document.getElementById('password').value !== document.getElementById('password2').value) {
 					document.getElementById('createbtn').disabled = true;
+				} else {
+					document.getElementById('createbtn').disabled = false;
 				}
 			}
 		</script>
