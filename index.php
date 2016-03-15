@@ -70,7 +70,7 @@ $caldavBackend    = new \Sabre\CalDAV\Backend\PDO($pdo);
 $tree = [
     new \Sabre\CalDAV\Principal\Collection($principalBackend),
     new \Sabre\CalDAV\CalendarRoot($principalBackend, $caldavBackend),
-    new \Sabre\CardDAV\AddressBook($principalBackend, $carddavBackend),
+    new \Sabre\CardDAV\AddressBookRoot($principalBackend, $carddavBackend),
 ];
 
 // The object tree needs in turn to be passed to the server class
