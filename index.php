@@ -49,6 +49,7 @@ set_error_handler("exception_error_handler");
 
 // Autoloader
 require_once 'vendor/autoload.php';
+include_once('PDO.php');
 
 /**
  * The backends. Yes we do really need all of them.
@@ -56,7 +57,7 @@ require_once 'vendor/autoload.php';
  * This allows any developer to subclass just any of them and hook into their
  * own backend systems.
  */
-$authBackend      = new \Sabre\DAV\Auth\Backend\PDO($pdo);
+$authBackend      = new \HCC\PDO($pdo);
 $principalBackend = new \Sabre\DAVACL\PrincipalBackend\PDO($pdo);
 $carddavBackend   = new \Sabre\CardDAV\Backend\PDO($pdo);
 $caldavBackend    = new \Sabre\CalDAV\Backend\PDO($pdo);
@@ -78,13 +79,12 @@ $server = new \Sabre\DAV\Server($tree);
 if (isset($baseUri)) $server->setBaseUri($baseUri);
 
 // Plugins
-$authBackend->setRealm("SabreDAV");
 $server->addPlugin(new \Sabre\DAV\Auth\Plugin($authBackend));
 $server->addPlugin(new \Sabre\DAVACL\Plugin());
 $server->addPlugin(new \Sabre\CalDAV\Plugin());
 $server->addPlugin(new \Sabre\CardDAV\Plugin());
-$server->addPlugin(new \Sabre\CalDAV\Subscriptions\PlugIn());
-$server->addPlugin(new \Sabre\CalDAV\Schedule\PlugIn());
+$server->addPlugin(new \Sabre\CalDAV\Subscriptions\Plugin());
+$server->addPlugin(new \Sabre\CalDAV\Schedule\Plugin());
 $server->addPlugin(new \Sabre\DAV\Sync\Plugin());
 $server->addPlugin(new \Sabre\DAV\Browser\Plugin());
 
