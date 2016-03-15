@@ -11,11 +11,14 @@ try {
 } catch (PDOException $e) {
 	echo $e->getMessage();
 }
-$sth = $dbh->query('SELECT `username`, `password` FROM `users` ORDER BY `username`');
+$sth = $dbh->query('SELECT `users`.`username`, `users`.`password`, `principals`.`uri`, `principals`.`email`, `principals`.`displayname` FROM `users` INNER JOIN `principals` ON `principals`.`uri` LIKE CONCAT('%', `users`.`username`, '%') ORDER BY `username`');
 $sth->setFetchMode(PDO::FETCH_OBJ);
 while($row = $sth->fetch()) {
 	echo "<tr>";
 	echo "<td>".$row->username."</td>";
+	echo "<td>".$row->displayname."</td>";
+	echo "<td>".$row->email."</td>";
+	echo "<td>".$row->uri."</td>";
 	echo "<td>".$row->password."</td>";
 	echo "</tr>";
 }
@@ -26,7 +29,11 @@ $dbh = null;
 		</table>
 		<form action="create.php" method="post">
 			<label for="username">Username</label>
-			<input type="text" name="usernmae" id="username"><br>
+			<input type="text" name="username" id="username"><br>
+			<label for="name">Name</label>
+			<input type="text" name="name" id="name"><br>
+			<label for="email">Email</label>
+			<input type="email" name="email" id="email"><br>
 			
 			<label for="password">Password</label>
 			<input type="password" name="password" id="password"><br>
