@@ -1,5 +1,5 @@
 <?php
-
+include_once('config.inc');
 /**
  * This server combines both CardDAV and CalDAV functionality into a single
  * server. It is assumed that the server runs at the root of a HTTP domain (be
@@ -32,7 +32,7 @@ $baseUri = '/';
  * Feel free to switch this to MySQL, it will definitely be better for higher
  * concurrency.
  */
-$pdo = new \PDO('mysql:host=127.0.0.1;port=3306;dbname=dav', 'dav', 'plantronics');
+$pdo = new \PDO('mysql:host=127.0.0.1;port=3306;dbname=dav', $dbuser, $dbpassword);
 $pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 
 /**

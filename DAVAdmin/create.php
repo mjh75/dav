@@ -1,4 +1,5 @@
 <?php
+	include_once("../config.inc");
 	$username = filter_input(INPUT_POST, 'username');
 	$displayname = filter_input(INPUT_POST, 'displayname');
 	$email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -10,7 +11,7 @@
 	$prin3 = "INSERT INTO `principals` SET `uri` = CONCAT('principals/', :username, '/calendar-proxy-write')";
 
 	try {
-		$dbh = new PDO("mysql:host=localhost;dbname=dav", "dav", "plantronics");
+		$dbh = new PDO("mysql:host=localhost;dbname=dav", $dbuser, $dbpassword);
 	} catch (PDOException $e) {
 		echo $e->getMessage();
 	}

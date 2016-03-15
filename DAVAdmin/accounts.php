@@ -7,8 +7,9 @@
 	<body>
 		<table>
 <?php
+include_once("../config.inc");
 try {
-	$dbh = new PDO("mysql:host=localhost;dbname=dav", "dav", "plantronics");
+	$dbh = new PDO("mysql:host=localhost;dbname=dav", $dbuser, $dbpassword);
 } catch (PDOException $e) {
 	echo $e->getMessage();
 }
