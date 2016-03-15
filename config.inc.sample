@@ -1,0 +1,3 @@
+<?php
+$dbuser = 'dav';
+$dbpassword = 'password goes here';
