@@ -38,7 +38,7 @@ $dbh = null;
 ?>
 			
 		</table>
-		<form action="create.php" method="post">
+		<form action="create.php" method="post" id="createform">
 			<fieldset>
 				<label for="username">Username</label>
 				<input type="text" name="username" id="username"><br>
@@ -53,7 +53,7 @@ $dbh = null;
 				<input type="password" name="password2" id="password2" onchange="comparePass();"><br>
 			</fieldset>
 			
-			<input type="submit" value="Create" id="createbtn">
+			<button type="button" id="createbtn" onclick="document.getElementById('createform').submit();">Create</button>
 		</form>
 		<script>
 			function comparePass() {
