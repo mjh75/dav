@@ -39,19 +39,28 @@ $dbh = null;
 			
 		</table>
 		<form action="create.php" method="post">
-			<label for="username">Username</label>
-			<input type="text" name="username" id="username"><br>
-			<label for="name">Name</label>
-			<input type="text" name="name" id="name"><br>
-			<label for="email">Email</label>
-			<input type="email" name="email" id="email"><br>
+			<fieldset>
+				<label for="username">Username</label>
+				<input type="text" name="username" id="username"><br>
+				<label for="name">Name</label>
+				<input type="text" name="name" id="name"><br>
+				<label for="email">Email</label>
+				<input type="email" name="email" id="email"><br>
 			
-			<label for="password">Password</label>
-			<input type="password" name="password" id="password"><br>
-			<label for="password2">Password (reenter)</label>
-			<input type="password" name="password2" id="password2"><br>
+				<label for="password">Password</label>
+				<input type="password" name="password" id="password" onchange="comparePass();"><br>
+				<label for="password2">Password (reenter)</label>
+				<input type="password" name="password2" id="password2" onchange="comparePass();"><br>
+			</fieldset>
 			
-			<input type="submit">
+			<input type="submit" value="Create" id="createbtn">
 		</form>
+		<script>
+			function comparePass() {
+				if(document.getElementById('password').value !== document.getElementById('password2').value) {
+					document.getElementById('createbtn').disabled = true;
+				}
+			}
+		</script>
 	</body>
 </html>
