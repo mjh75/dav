@@ -21,7 +21,7 @@ $sth = $dbh->query("SELECT
 										INNER JOIN `principals` ON `principals`.`uri` LIKE CONCAT('%', `users`.`username`, '%')
 										ORDER BY
 											`users`.`username` ASC,
-											`principals`.`displayname` ASC,
+											`principals`.`displayname` DESC,
 											`principals`.`uri` DESC");
 $sth->setFetchMode(PDO::FETCH_OBJ);
 while($row = $sth->fetch()) {
