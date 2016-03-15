@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<title>Account List</title>
+		<style src="style.css"></style>
 	</head>
 	<body>
 		<table>
