@@ -1,4 +1,5 @@
 RewriteEngine On
 RewriteBase /
+RewriteCond /var/www/html/%{REQUEST_URI} !-f
 RewriteRule ^(.+) index.php [L]
 
