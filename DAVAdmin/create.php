@@ -8,4 +8,11 @@
 	$prin1 = "INSERT INTO `principals` SET `uri` = 'principals/$username', `email`='$email', `displayname`='$displayname'";
 	$prin2 = "INSERT INTO `principals` SET `uri` = 'principals/$username/calendar-proxy-read'";
 	$prin3 = "INSERT INTO `principals` SET `uri` = 'principals/$username/calendar-proxy-write'";
+	
+	echo "<pre>";
+	echo $users;
+	echo $prin1;
+	echo $prin2;
+	echo $prin3;
+	echo "</pre>";
 		
