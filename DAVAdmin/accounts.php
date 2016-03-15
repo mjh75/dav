@@ -11,7 +11,17 @@ try {
 } catch (PDOException $e) {
 	echo $e->getMessage();
 }
-$sth = $dbh->query("SELECT `users`.`username`, `users`.`password`, `principals`.`uri`, `principals`.`email`, `principals`.`displayname` FROM `users` INNER JOIN `principals` ON `principals`.`uri` LIKE CONCAT('%', `users`.`username`, '%') ORDER BY `username`");
+$sth = $dbh->query("SELECT
+											`users`.`username`,
+											`principals`.`uri`,
+											`principals`.`email`,
+											`principals`.`displayname`
+										FROM
+											`users`
+										INNER JOIN `principals` ON `principals`.`uri` LIKE CONCAT('%', `users`.`username`, '%')
+										ORDER BY
+											`users`.`username` ASC,
+											`principals`.`uri` DESC");
 $sth->setFetchMode(PDO::FETCH_OBJ);
 while($row = $sth->fetch()) {
 	echo "<tr>";
@@ -19,7 +29,6 @@ while($row = $sth->fetch()) {
 	echo "<td>".$row->displayname."</td>";
 	echo "<td>".$row->email."</td>";
 	echo "<td>".$row->uri."</td>";
-	echo "<td>".$row->password."</td>";
 	echo "</tr>";
 }
 
