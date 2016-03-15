@@ -14,24 +14,24 @@
 	} catch (PDOException $e) {
 		echo $e->getMessage();
 	}
+	
 	$sth1 = $dbh->prepare($users);
-	$data = array('username' => $username, 'password' => $password);
-	$sth1->execute($data);
-	unset($data);
+	$sth1->bindParam(':username', $username);
+	$sth1->bindParam(':password', $password);
+	$sth1->execute();
 	
 	$sth2 = $dbh->prepare($prin1);
-	$data = array('username' => $username, 'email' => $email, 'displayname' => $displayname);
-	$sth2->execute($data);
-	unset($data);
+	$sth2->bindParam(':username', $username);
+	$sth2->bindParam(':email', $email);
+	$sth2->bindParam('displayname', $displayname);
+	$sth2->execute();
 	
 	$sth3 = $dbh->prepare($prin2);
-	$data = array('username' => $username);
-	$sth3->execute($data);
-	unset($data);
+	$sth3->bindParam(':username', $username);
+	$sth3->execute();
 
 	$sth4 = $dbh->prepare($prin3);
-	$data = array('username' => $username);
-	$sth4->execute($data);
-	unset($data);
+	$sth4->bindParam(':username', $username);
+	$sth4->execute();
 	
 	header("Location: accounts.php");
