@@ -43,7 +43,7 @@ $dbh = null;
 				<label for="username">Username</label>
 				<input type="text" name="username" id="username"><br>
 				<label for="name">Name</label>
-				<input type="text" name="name" id="name"><br>
+				<input type="text" name="displayname" id="displayname"><br>
 				<label for="email">Email</label>
 				<input type="email" name="email" id="email"><br>
 			
