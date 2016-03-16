@@ -17,10 +17,14 @@ $sth = $dbh->query("SELECT
 											`users`.`username`,
 											`principals`.`uri`,
 											`principals`.`email`,
-											`principals`.`displayname`
+											`principals`.`displayname`,
+											`calendars`.`displayname` AS 'calendar',
+											`addressbooks`.`displayname` AS 'addressbook'
 										FROM
 											`users`
-										INNER JOIN `principals` ON `principals`.`uri` LIKE CONCAT('%', `users`.`username`, '%')
+										INNER JOIN `principals` ON `principals`.`uri` LIKE CONCAT('%', `users`.`username`)
+										LEFT JOIN `calendars` ON `calendars`.`principaluri` LIKE CONCAT('%', `users`.`username`, '%')
+										LEFT JOIN `addressbooks` ON `addressbooks`.`principaluri` LIKE CONCAT('%', `users`.`username`, '%')
 										ORDER BY
 											`users`.`username` ASC,
 											`principals`.`displayname` DESC,
@@ -32,6 +36,8 @@ while($row = $sth->fetch()) {
 	echo "<td>".$row->displayname."</td>";
 	echo "<td>".$row->email."</td>";
 	echo "<td>".$row->uri."</td>";
+	echo "<td>".$row->calendar."</td>";
+	echo "<td>".$row->addressbook."</td>";
 	echo "</tr>";
 }
 
