@@ -9,6 +9,8 @@
 	$prin1 = "INSERT INTO `principals` SET `uri` = CONCAT('principals/', :username), `email`=:email, `displayname`=:displayname";
 	$prin2 = "INSERT INTO `principals` SET `uri` = CONCAT('principals/', :username, '/calendar-proxy-read')";
 	$prin3 = "INSERT INTO `principals` SET `uri` = CONCAT('principals/', :username, '/calendar-proxy-write')";
+	$cal = "INSERT INTO `calendars` SET `principaluri`=CONCAT('principals/', :username), `displayname`='Calendar', `uri`='calendar', `components`='VEVENT,VTODO'";
+	$address = "INSERT INTO `addressbooks` SET `principaluri`=CONCAT('principals/', :username), `displayname` = 'Address Book', `uri` = 'addressbook'";
 
 	try {
 		$dbh = new PDO("mysql:host=localhost;dbname=dav", $dbuser, $dbpassword);
@@ -34,5 +36,13 @@
 	$sth4 = $dbh->prepare($prin3);
 	$sth4->bindParam(':username', $username);
 	$sth4->execute();
+
+	$sth5 = $dbh->prepare($cal);
+	$sth5->bindParam(':username', $username);
+	$sth5->execute();
+
+	$sth6 = $dbh->prepare($address);
+	$sth6>bindParam(':username', $username);
+	$sth6->execute();
 	
 	header("Location: accounts.php");
