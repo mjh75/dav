@@ -1,7 +1,0 @@
-RewriteEngine On
-RewriteBase /
-RewriteCond /var/www/html/%{REQUEST_URI} !-f
-RewriteRule ^.well-known/caldav / [L,R=301]
-RewriteRule ^.well-known/carddav / [L,R=301]
-RewriteRule ^(.+) index.php [L]
-
