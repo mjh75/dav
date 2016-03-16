@@ -1,0 +1,3 @@
+* Add email instructions on how to setup the new account
+* Include links to various known working clients
+* Add authentication to the admin section
