@@ -42,7 +42,7 @@
 	$sth5->execute();
 
 	$sth6 = $dbh->prepare($address);
-	$sth6>bindParam(':username', $username);
+	$sth6->bindParam(':username', $username);
 	$sth6->execute();
 	
 	header("Location: accounts.php");
