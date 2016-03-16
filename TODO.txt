@@ -3,3 +3,4 @@
 * Add authentication to the admin section
 * Consider adding transaction support for adding accounts
 * Consider rolling a web GUI into the package
+* Build a backup script for the package (thinking mysqldump)
