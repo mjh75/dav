@@ -76,7 +76,9 @@ $tree = [
 
 // The object tree needs in turn to be passed to the server class
 $server = new \Sabre\DAV\Server($tree);
-if (isset($baseUri)) $server->setBaseUri($baseUri);
+if(isset($baseUri)) {
+	$server->setBaseUri($baseUri);
+}
 
 // Plugins
 $server->addPlugin(new \Sabre\DAV\Auth\Plugin($authBackend));
