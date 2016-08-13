@@ -1,3 +1,5 @@
 <?php
+$dbhost = "localhost";
+$db = "dav";
 $dbuser = 'dav';
 $dbpassword = 'password goes here';
