@@ -1,5 +1,0 @@
-* Add email instructions on how to setup the new account
-* Include links to various known working clients
-* Add authentication to the admin section
-* Consider adding transaction support for adding accounts
-* Consider rolling a web GUI into the package
