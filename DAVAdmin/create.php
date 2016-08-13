@@ -1,5 +1,5 @@
 <?php
-	include_once("../config.inc");
+	include_once(dirname(__FILE__)."/config.inc");
 	$username = filter_input(INPUT_POST, 'username');
 	$displayname = filter_input(INPUT_POST, 'displayname');
 	$email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -13,7 +13,7 @@
 	$address = "INSERT INTO `addressbooks` SET `principaluri`=CONCAT('principals/', :username), `displayname` = 'Address Book', `uri` = 'addressbook'";
 
 	try {
-		$dbh = new PDO("mysql:host=localhost;dbname=dav", $dbuser, $dbpassword);
+		$dbh = new PDO("mysql:host={$dbhost};dbname={$db}", $dbuser, $dbpassword);
 	} catch (PDOException $e) {
 		echo $e->getMessage();
 	}

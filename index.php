@@ -32,7 +32,7 @@ $baseUri = '/';
  * Feel free to switch this to MySQL, it will definitely be better for higher
  * concurrency.
  */
-$pdo = new \PDO('mysql:host=127.0.0.1;port=3306;dbname=dav', $dbuser, $dbpassword);
+$pdo = new \PDO('mysql:host={$dbhost};port=3306;dbname={$db}', $dbuser, $dbpassword);
 $pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 
 /**
@@ -48,8 +48,8 @@ function exception_error_handler($errno, $errstr, $errfile, $errline ) {
 set_error_handler("exception_error_handler");
 
 // Autoloader
-require_once 'vendor/autoload.php';
-include_once('PDO.php');
+require_once(dirname(__FILE__).'/vendor/autoload.php');
+include_once(dirname(__FILE__).'/PDO.php');
 
 /**
  * The backends. Yes we do really need all of them.
