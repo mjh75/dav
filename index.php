@@ -1,66 +1,56 @@
 <?php
-include_once('config.inc');
-/**
- * This server combines both CardDAV and CalDAV functionality into a single
- * server. It is assumed that the server runs at the root of a HTTP domain (be
- * that a domainname-based vhost or a specific TCP port.
+/* 
+ * Copyright (C) 2016 Michael J. Hartwick <hartwick at hartwick.com>
  *
- * This example also assumes that you're using SQLite and the database has
- * already been setup (along with the database tables).
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * You may choose to use MySQL instead, just change the PDO connection
- * statement.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+require_once(dirname(__FILE__).'/config.inc');
+require_once(dirname(__FILE__).'/vendor/autoload.php');
+require_once(dirname(__FILE__).'/PDO.php');
 
 /**
- * UTC or GMT is easy to work with, and usually recommended for any
- * application.
+ * UTC is the easiest to work with especially for something that deals with
+ * time from potentially multiple time zones.
  */
 date_default_timezone_set('UTC');
 
 /**
- * Make sure this setting is turned on and reflect the root url for your WebDAV
- * server.
- *
- * This can be for example the root / or a complete path to your server script.
- */
-$baseUri = '/';
-
-/**
- * Database
- *
- * Feel free to switch this to MySQL, it will definitely be better for higher
- * concurrency.
+ * Database PDO connection
  */
 $pdo = new \PDO('mysql:host={$dbhost};port=3306;dbname={$db}', $dbuser, $dbpassword);
-$pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 /**
- * Mapping PHP errors to exceptions.
- *
- * While this is not strictly needed, it makes a lot of sense to do so. If an
- * E_NOTICE or anything appears in your code, this allows SabreDAV to intercept
- * the issue and send a proper response back to the client (HTTP/1.1 500).
+ * Mapping PHP errors to exceptions. This is done to allow SabreDAV to
+ * become aware of errors and send the proper HTTP result code back to the
+ * client
  */
 function exception_error_handler($errno, $errstr, $errfile, $errline ) {
-    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+	throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 }
 set_error_handler("exception_error_handler");
 
-// Autoloader
-require_once(dirname(__FILE__).'/vendor/autoload.php');
-include_once(dirname(__FILE__).'/PDO.php');
-
 /**
- * The backends. Yes we do really need all of them.
- *
- * This allows any developer to subclass just any of them and hook into their
- * own backend systems.
+ * The backends.
+ * The $authBackend has been written to use a SHA256 hash for password
+ * verification for users. The rest of the backends are currently stock
+ * sabre/dav
  */
-$authBackend      = new \HCC\PDO($pdo);
-$principalBackend = new \Sabre\DAVACL\PrincipalBackend\PDO($pdo);
-$carddavBackend   = new \Sabre\CardDAV\Backend\PDO($pdo);
-$caldavBackend    = new \Sabre\CalDAV\Backend\PDO($pdo);
+$auth = new \HCC\PDO($pdo);
+$principal = new \Sabre\DAVACL\PrincipalBackend\PDO($pdo);
+$caldav = new \Sabre\CalDAV\Backend\PDO($pdo);
+$carddav = new \Sabre\CardDAV\Backend\PDO($pdo);
 
 /**
  * The directory tree
@@ -69,26 +59,29 @@ $caldavBackend    = new \Sabre\CalDAV\Backend\PDO($pdo);
  * WebDAV server.
  */
 $tree = [
-    new \Sabre\CalDAV\Principal\Collection($principalBackend),
-    new \Sabre\CalDAV\CalendarRoot($principalBackend, $caldavBackend),
-    new \Sabre\CardDAV\AddressBookRoot($principalBackend, $carddavBackend),
+    new \Sabre\CalDAV\Principal\Collection($principal),
+    new \Sabre\CalDAV\CalendarRoot($principal, $caldav),
+    new \Sabre\CardDAV\AddressBookRoot($principal, $carddav),
 ];
 
 // The object tree needs in turn to be passed to the server class
-$server = new \Sabre\DAV\Server($tree);
-if(isset($baseUri)) {
-	$server->setBaseUri($baseUri);
-}
+$dav = new \Sabre\DAV\Server($tree);
+$dav->setBaseUri('/');
 
-// Plugins
-$server->addPlugin(new \Sabre\DAV\Auth\Plugin($authBackend));
-$server->addPlugin(new \Sabre\DAVACL\Plugin());
-$server->addPlugin(new \Sabre\CalDAV\Plugin());
-$server->addPlugin(new \Sabre\CardDAV\Plugin());
-$server->addPlugin(new \Sabre\CalDAV\Subscriptions\Plugin());
-$server->addPlugin(new \Sabre\CalDAV\Schedule\Plugin());
-$server->addPlugin(new \Sabre\DAV\Sync\Plugin());
-$server->addPlugin(new \Sabre\DAV\Browser\Plugin());
+/*
+ * I suspect several of these plugin's are not strictly required but until
+ * I have verified that I am leaving them in here.
+ */
+$dav->addPlugin(new \Sabre\DAV\Auth\Plugin($auth));
+$dav->addPlugin(new \Sabre\DAVACL\Plugin());
+$dav->addPlugin(new \Sabre\CalDAV\Plugin());
+$dav->addPlugin(new \Sabre\CardDAV\Plugin());
+$dav->addPlugin(new \Sabre\CalDAV\Subscriptions\Plugin());
+$dav->addPlugin(new \Sabre\CalDAV\Schedule\Plugin());
+$dav->addPlugin(new \Sabre\DAV\Sync\Plugin());
+$dav->addPlugin(new \Sabre\DAV\Browser\Plugin());
 
-// And off we go!
-$server->exec();
+/*
+ * Now that everything is setup run the server
+ */
+$dav->exec();
